@@ -110,11 +110,18 @@ def UpdateUser(userid,price,t,details):
 	transfer_enable = int(details['bandwidth']) * 1024 * 1024 * 1024
 	node_connector = int(details['connector'])
 	_class = int(details['class'])
-	class_expire = int(t) + int(details['class_expire']) * 24 * 60 * 60
+	class_expire = int(t) + int(details['class_expire']) * 86400
 	class_expire = time.localtime(class_expire)
 	class_expire = time.strftime("%Y-%m-%d %H:%M:%S",class_expire)
 
-	sql = "UPDATE `user` SET `u` = 0, `d` = 0, `transfer_enable` = %d, `money` = `money` - %f, `node_connector` = %d, `last_day_t` = 0, `class` = %d, `class_expire` = str_to_date(\'%s\','%%Y-%%m-%%d %%H:%%i:%%s') WHERE id = %s"%(transfer_enable,price,node_connector,_class,class_expire,userid)
+	if 'expire' in details.keys():
+		expire = int(t) + int(details['expire']) * 86400
+		expire = time.localtime(expire)
+		expire = time.strftime("%Y-%m-%d %H:%M:%S",expire)
+
+		sql = "UPDATE `user` SET `u` = 0, `d` = 0, `transfer_enable` = %d, `money` = `money` - %f, `node_connector` = %d, `last_day_t` = 0, `class` = %d, `class_expire` = str_to_date(\'%s\','%%Y-%%m-%%d %%H:%%i:%%s'), `expire_in` = str_to_date(\'%s\','%%Y-%%m-%%d %%H:%%i:%%s') WHERE id = %s"%(transfer_enable,price,node_connector,_class,class_expire,expire,userid)
+	else:
+		sql = "UPDATE `user` SET `u` = 0, `d` = 0, `transfer_enable` = %d, `money` = `money` - %f, `node_connector` = %d, `last_day_t` = 0, `class` = %d, `class_expire` = str_to_date(\'%s\','%%Y-%%m-%%d %%H:%%i:%%s') WHERE id = %s"%(transfer_enable,price,node_connector,_class,class_expire,userid)	
 	
 	try:
 		cursor.execute(sql)
