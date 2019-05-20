@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import config
 import sql
 import hashlib
