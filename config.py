@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 TOKEN = '' #申请的充值 bot 的 Token
 
 #魔改数据库信息
